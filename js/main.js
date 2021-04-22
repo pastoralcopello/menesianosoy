@@ -1,4 +1,5 @@
 const contentDiv = document.querySelector('.content')
+const titleH3 = document.querySelector('.title')
 
 function today() {
 	const today = new Date()
@@ -22,6 +23,8 @@ fetch(apiURL())
 	.then((data) => {
 		console.log('data')
 		console.log(data)
-		const html = data[0].content.rendered
-		contentDiv.innerHTML = html
+		const contentHTML = data[0].content.rendered
+		const title = data[0].title.rendered
+		contentDiv.innerHTML = contentHTML
+		titleH3.innerText = title
 	})

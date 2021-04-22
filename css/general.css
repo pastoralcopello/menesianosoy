@@ -1,0 +1,11 @@
+body {
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 300;
+	margin: 0;
+	background: var(--white);
+}
+
+:root {
+	--dark-blue: #303f9f;
+	--white: #fafafa;
+}

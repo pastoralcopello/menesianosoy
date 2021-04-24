@@ -8,8 +8,8 @@
     ],
     "rewrites": [
       {
-        "source": "/todayHTTP",
-        "function": "todayHTTP"
+        "source": "/content",
+        "function": "content"
       }
    ]
   },

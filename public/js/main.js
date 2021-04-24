@@ -19,3 +19,5 @@ async function loadContent() {
 }
 
 loadContent()
+
+console.log('Colaborá en github.com/pastoralcopello/menesianosoy !')

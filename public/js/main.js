@@ -5,7 +5,7 @@ async function loadContent() {
 	const today = new Date()
 	const timezoneOffset = new Date().getTimezoneOffset()
 	const res = await fetch('https://menesianosoy.web.app/content', {
-	// const res = await fetch('http://localhost:5000/content', {
+		// const res = await fetch('http://localhost:5000/content', {
 		headers: {
 			'Content-Type': 'application/json',
 		},

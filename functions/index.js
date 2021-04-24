@@ -24,11 +24,9 @@ function contentData(response) {
 }
 
 function oneDayAPI(date) {
-	const origin = dayBefore(date).string()
+	const origin = date.dayBefore().string()
 	const end = date.string()
-	const url = `http://institutosanpablo.com.ar/aplicacion/wp-json/wp/v2/posts?categories=1&orderby=date&order=desc&after=${origin}T23:59:59&before=${end}T23:59:59`
-	console.log(url)
-	return url
+	return `http://institutosanpablo.com.ar/aplicacion/wp-json/wp/v2/posts?categories=1&orderby=date&order=desc&after=${origin}T23:59:59&before=${end}T23:59:59`
 }
 
 function multipleDaysAPI(date, daysBefore, daysAfter) {
@@ -37,30 +35,29 @@ function multipleDaysAPI(date, daysBefore, daysAfter) {
 	return `http://institutosanpablo.com.ar/aplicacion/wp-json/wp/v2/posts?categories=1&orderby=date&order=desc&after=${origin}T23:59:59&before=${end}T23:59:59`
 }
 
-
-Date.prototype.dayBefore = function() {
-	const newDate = new Date(this.getTime());
-	newDate.setDate(this.getDate() - 1);
+Date.prototype.dayBefore = function () {
+	const newDate = new Date(this.getTime())
+	newDate.setDate(this.getDate() - 1)
 	return newDate
 }
 
-Date.prototype.daysBefore = function(days) {
-	const newDate = new Date(this.getTime());
-	newDate.setDate(this.getDate() - days);
+Date.prototype.daysBefore = function (days) {
+	const newDate = new Date(this.getTime())
+	newDate.setDate(this.getDate() - days)
 	return newDate
 }
 
-Date.prototype.daysAfter = function(days) {
-	const newDate = new Date(this.getTime());
-	newDate.setDate(this.getDate() + days);
+Date.prototype.daysAfter = function (days) {
+	const newDate = new Date(this.getTime())
+	newDate.setDate(this.getDate() + days)
 	return newDate
 }
 
-Date.prototype.string = function() {
+Date.prototype.string = function () {
 	return this.toISOString().split('T')[0]
 }
 
-Date.prototype.normalizeTZ = function(timezoneOffset) {
-	const newDate = new Date(this.getTime() - timezoneOffset*60000)
+Date.prototype.normalizeTZ = function (timezoneOffset) {
+	const newDate = new Date(this.getTime() - timezoneOffset * 60000)
 	return newDate
 }

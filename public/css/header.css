@@ -23,3 +23,14 @@ header h1 {
 .icon {
 	width: 50px;
 }
+
+.nav-item {
+	text-decoration: none;
+	color: white;
+}
+
+nav {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}

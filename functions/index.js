@@ -7,7 +7,7 @@ exports.todayContent = functions.https.onRequest(async (request, response) => {
 	await fetch(todayAPI(timezoneOffset))
 		.then((res) => res.json())
 		.then((json) => {
-			const data = todayContent(json)
+			const data = oneDateContent(json)
 			response.status(200).send(JSON.stringify(data))
 		})
 })
@@ -24,7 +24,19 @@ exports.futureContent = functions.https.onRequest(async (request, response) => {
 		})
 })
 
-function todayContent(articles) {
+exports.someDateContent = functions.https.onRequest(async (request, response) => {
+	const body = request.body
+	const dateString = body.date
+	const date = new Date(dateString)
+	await fetch(someDateAPI(date))
+		.then((res) => res.json())
+		.then((json) => {
+			const data = oneDateContent(json)
+			response.status(200).send(JSON.stringify(data))
+		})
+})
+
+function oneDateContent(articles) {
 	const article = articles[0]
 	return articleData(article)
 }
@@ -32,9 +44,9 @@ function todayContent(articles) {
 function articleData(article) {
 	return {
 		content: article.content.rendered,
-		title: article.title.rendered,
+		title: article.title.rendered.replaceDash(),
 		url: article.link,
-		date: article.date,
+		date: article.date.split('T')[0],
 		dateLongString: dateLongString(article.date)
 	}
 }
@@ -63,6 +75,12 @@ function futureContentAPI(timezoneOffset) {
 	return `http://institutosanpablo.com.ar/aplicacion/wp-json/wp/v2/posts?categories=1&orderby=date&order=desc&after=${todayString}T23:59:59`
 }
 
+function someDateAPI(date) {
+	const origin = date.dayBefore().string()
+	const end = date.string()
+	return `http://institutosanpablo.com.ar/aplicacion/wp-json/wp/v2/posts?categories=1&orderby=date&order=desc&after=${origin}T23:59:59&before=${end}T23:59:59`
+}
+
 function todayDate(timezoneOffset) {
 	return new Date().normalizeTZ(timezoneOffset)
 }
@@ -86,6 +104,10 @@ Date.prototype.string = function () {
 Date.prototype.normalizeTZ = function (timezoneOffset) {
 	const newDate = new Date(this.getTime() - timezoneOffset * 60000)
 	return newDate
+}
+
+String.prototype.replaceDash = function () {
+	return this.replace('&#8211;', '–')
 }
 
 function sortArticles(articles) {

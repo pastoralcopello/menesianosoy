@@ -1,21 +1,22 @@
 const contentDiv = document.querySelector('.content')
 const titleH3 = document.querySelector('.title')
+const dateH4 = document.querySelector('.date')
 
 async function loadContent() {
-	const today = new Date()
 	const timezoneOffset = new Date().getTimezoneOffset()
-	const res = await fetch('https://menesianosoy.web.app/content', {
-		// const res = await fetch('http://localhost:5000/content', {
+	const res = await fetch('https://menesianosoy.web.app/todayContent', {
+	// const res = await fetch('http://localhost:5000/todayContent', {
 		headers: {
 			'Content-Type': 'application/json',
 		},
 		method: 'post',
-		body: JSON.stringify({date: today, timezoneOffset: timezoneOffset}),
+		body: JSON.stringify({timezoneOffset: timezoneOffset}),
 	})
 
-	const data = await res.json()
-	contentDiv.innerHTML = data.content
-	titleH3.innerText = data.title
+	const article = await res.json()
+	contentDiv.innerHTML = article.content
+	titleH3.innerText = article.title
+	dateH4.innerText = article.dateLongString
 }
 
 loadContent()

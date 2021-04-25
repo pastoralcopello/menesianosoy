@@ -1,38 +1,70 @@
 const functions = require('firebase-functions')
 const fetch = require('node-fetch')
 
-exports.content = functions.https.onRequest(async (request, response) => {
+exports.todayContent = functions.https.onRequest(async (request, response) => {
 	const body = request.body
-	const dateString = body.date
 	const timezoneOffset = body.timezoneOffset
-	const date = new Date(dateString).normalizeTZ(timezoneOffset)
-	await fetch(oneDayAPI(date))
+	await fetch(todayAPI(timezoneOffset))
 		.then((res) => res.json())
 		.then((json) => {
-			const data = contentData(json)
+			const data = todayContent(json)
 			response.status(200).send(JSON.stringify(data))
 		})
 })
 
-function contentData(response) {
-	const object = response[0]
+exports.futureContent = functions.https.onRequest(async (request, response) => {
+	const body = request.body
+	const timezoneOffset = body.timezoneOffset
+	await fetch(futureContentAPI(timezoneOffset))
+		.then((res) => res.json())
+		.then((json) => {
+			const articles = json.map(article => articleData(article))
+			sortArticles(articles)
+			response.status(200).send(JSON.stringify(articles))
+		})
+})
+
+function todayContent(articles) {
+	const article = articles[0]
+	return articleData(article)
+}
+
+function articleData(article) {
 	return {
-		content: object.content.rendered,
-		title: object.title.rendered,
-		url: object.link,
+		content: article.content.rendered,
+		title: article.title.rendered,
+		url: article.link,
+		date: article.date,
+		dateLongString: dateLongString(article.date)
 	}
 }
 
-function oneDayAPI(date) {
-	const origin = date.dayBefore().string()
-	const end = date.string()
+function dateLongString(dateString) {
+	const date = new Date(dateString)
+	const gmtDate = date.normalizeTZ(180)
+	const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
+	return gmtDate.toLocaleDateString("es-AR", options).firstLetterUpperCase()
+}
+
+String.prototype.firstLetterUpperCase = function() {
+	return this.charAt(0).toUpperCase() + this.slice(1)
+}
+
+function todayAPI(timezoneOffset) {
+	const today = todayDate(timezoneOffset)
+	const origin = today.dayBefore().string()
+	const end = today.string()
 	return `http://institutosanpablo.com.ar/aplicacion/wp-json/wp/v2/posts?categories=1&orderby=date&order=desc&after=${origin}T23:59:59&before=${end}T23:59:59`
 }
 
-function multipleDaysAPI(date, daysBefore, daysAfter) {
-	const origin = date.daysBefore(daysBefore).string()
-	const end = date.daysAfter(daysAfter).string()
-	return `http://institutosanpablo.com.ar/aplicacion/wp-json/wp/v2/posts?categories=1&orderby=date&order=desc&after=${origin}T23:59:59&before=${end}T23:59:59`
+function futureContentAPI(timezoneOffset) {
+	const today = todayDate(timezoneOffset)
+	const todayString = today.string()
+	return `http://institutosanpablo.com.ar/aplicacion/wp-json/wp/v2/posts?categories=1&orderby=date&order=desc&after=${todayString}T23:59:59`
+}
+
+function todayDate(timezoneOffset) {
+	return new Date().normalizeTZ(timezoneOffset)
 }
 
 Date.prototype.dayBefore = function () {
@@ -47,12 +79,6 @@ Date.prototype.daysBefore = function (days) {
 	return newDate
 }
 
-Date.prototype.daysAfter = function (days) {
-	const newDate = new Date(this.getTime())
-	newDate.setDate(this.getDate() + days)
-	return newDate
-}
-
 Date.prototype.string = function () {
 	return this.toISOString().split('T')[0]
 }
@@ -60,4 +86,10 @@ Date.prototype.string = function () {
 Date.prototype.normalizeTZ = function (timezoneOffset) {
 	const newDate = new Date(this.getTime() - timezoneOffset * 60000)
 	return newDate
+}
+
+function sortArticles(articles) {
+	articles.sort(function(a, b) {
+		return a.date.localeCompare(b.date)
+	})
 }

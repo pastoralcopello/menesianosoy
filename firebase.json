@@ -8,8 +8,12 @@
     ],
     "rewrites": [
       {
-        "source": "/content",
-        "function": "content"
+        "source": "/todayContent",
+        "function": "todayContent"
+      },
+      {
+        "source": "/futureContent",
+        "function": "futureContent"
       }
    ]
   },

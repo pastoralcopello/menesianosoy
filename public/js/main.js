@@ -4,8 +4,8 @@ const dateH4 = document.querySelector('.date')
 
 async function loadContent() {
 	const timezoneOffset = new Date().getTimezoneOffset()
-	// const res = await fetch('https://menesianosoy.web.app/todayContent', {
-	const res = await fetch('http://localhost:5000/todayContent', {
+	const res = await fetch('https://menesianosoy.web.app/todayContent', {
+	// const res = await fetch('http://localhost:5000/todayContent', {
 		headers: {
 			'Content-Type': 'application/json',
 		},

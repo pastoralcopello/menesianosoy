@@ -8,8 +8,8 @@ const date = params.get('date')
 
 async function loadContent() {
 	const timezoneOffset = new Date().getTimezoneOffset()
-	// const res = await fetch('https://menesianosoy.web.app/someDateContent', {
-	const res = await fetch('http://localhost:5000/someDateContent', {
+	const res = await fetch('https://menesianosoy.web.app/someDateContent', {
+	// const res = await fetch('http://localhost:5000/someDateContent', {
 		headers: {
 			'Content-Type': 'application/json',
 		},

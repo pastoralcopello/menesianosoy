@@ -2,8 +2,8 @@ const articlesListContainer = document.querySelector('.articles-list-container')
 
 async function loadContent() {
 	const timezoneOffset = new Date().getTimezoneOffset()
-	// const res = await fetch('https://menesianosoy.web.app/futureContent', {
-	const res = await fetch('http://localhost:5000/futureContent', {
+	const res = await fetch('https://menesianosoy.web.app/futureContent', {
+	// const res = await fetch('http://localhost:5000/futureContent', {
 		headers: {
 			'Content-Type': 'application/json',
 		},

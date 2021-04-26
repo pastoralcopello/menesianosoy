@@ -18,23 +18,25 @@ exports.futureContent = functions.https.onRequest(async (request, response) => {
 	await fetch(futureContentAPI(timezoneOffset))
 		.then((res) => res.json())
 		.then((json) => {
-			const articles = json.map(article => articleData(article))
+			const articles = json.map((article) => itemData(article))
 			sortArticles(articles)
 			response.status(200).send(JSON.stringify(articles))
 		})
 })
 
-exports.someDateContent = functions.https.onRequest(async (request, response) => {
-	const body = request.body
-	const dateString = body.date
-	const date = new Date(dateString)
-	await fetch(someDateAPI(date))
-		.then((res) => res.json())
-		.then((json) => {
-			const data = oneDateContent(json)
-			response.status(200).send(JSON.stringify(data))
-		})
-})
+exports.someDateContent = functions.https.onRequest(
+	async (request, response) => {
+		const body = request.body
+		const dateString = body.date
+		const date = new Date(dateString)
+		await fetch(someDateAPI(date))
+			.then((res) => res.json())
+			.then((json) => {
+				const data = oneDateContent(json)
+				response.status(200).send(JSON.stringify(data))
+			})
+	}
+)
 
 function oneDateContent(articles) {
 	const article = articles[0]
@@ -47,18 +49,30 @@ function articleData(article) {
 		title: article.title.rendered.replaceDash(),
 		url: article.link,
 		date: article.date.split('T')[0],
-		dateLongString: dateLongString(article.date)
+		dateLongString: dateLongString(article.date),
+	}
+}
+
+function itemData(article) {
+	return {
+		date: article.date.split('T')[0],
+		dateLongString: dateLongString(article.date),
 	}
 }
 
 function dateLongString(dateString) {
 	const date = new Date(dateString)
 	const gmtDate = date.normalizeTZ(180)
-	const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
-	return gmtDate.toLocaleDateString("es-AR", options).firstLetterUpperCase()
+	const options = {
+		weekday: 'long',
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	}
+	return gmtDate.toLocaleDateString('es-AR', options).firstLetterUpperCase()
 }
 
-String.prototype.firstLetterUpperCase = function() {
+String.prototype.firstLetterUpperCase = function () {
 	return this.charAt(0).toUpperCase() + this.slice(1)
 }
 
@@ -111,7 +125,7 @@ String.prototype.replaceDash = function () {
 }
 
 function sortArticles(articles) {
-	articles.sort(function(a, b) {
+	articles.sort(function (a, b) {
 		return a.date.localeCompare(b.date)
 	})
 }

@@ -2,10 +2,29 @@ body {
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 300;
 	margin: 0;
-	background: var(--white);
+	background: var(--dark-blue);
 }
 
 :root {
 	--dark-blue: #303f9f;
 	--white: #fafafa;
+}
+
+section {
+	margin-top: 50px;
+	padding: 50px 10px;
+	min-height: 62vh;
+	background: var(--white);
+}
+
+.fab {
+	color: var(--white);
+}
+
+.fab:hover {
+	opacity: 0.7;
+}
+
+.display-none {
+	display: none !important;
 }

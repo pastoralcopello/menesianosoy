@@ -68,5 +68,6 @@ node_modules/
 
 archivo/
 .DS_Store
+.vscode/
 
 errores.txt

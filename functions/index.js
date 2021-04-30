@@ -1,6 +1,15 @@
 const functions = require('firebase-functions')
 const fetch = require('node-fetch')
 
+exports.lastContent = functions.https.onRequest(async (request, response) => {
+	await fetch(lastContentAPI())
+		.then((res) => res.json())
+		.then((json) => {
+			const dateString = json[0].date.split('T')[0]
+			response.status(200).send(JSON.stringify(dateString))
+		})
+})
+
 exports.todayContent = functions.https.onRequest(async (request, response) => {
 	const body = request.body
 	const timezoneOffset = body.timezoneOffset
@@ -23,6 +32,20 @@ exports.futureContent = functions.https.onRequest(async (request, response) => {
 			response.status(200).send(JSON.stringify(articles))
 		})
 })
+
+// exports.previousContent = functions.https.onRequest(
+// 	async (request, response) => {
+// 		const body = request.body
+// 		const timezoneOffset = body.timezoneOffset
+// 		await fetch(previousContentAPI(timezoneOffset))
+// 			.then((res) => res.json())
+// 			.then((json) => {
+// 				const articles = json.map((article) => itemData(article))
+// 				sortArticles(articles)
+// 				response.status(200).send(JSON.stringify(articles))
+// 			})
+// 	}
+// )
 
 exports.someDateContent = functions.https.onRequest(
 	async (request, response) => {
@@ -94,6 +117,16 @@ function someDateAPI(date) {
 	const end = date.string()
 	return `http://institutosanpablo.com.ar/aplicacion/wp-json/wp/v2/posts?categories=1&orderby=date&order=desc&after=${origin}T23:59:59&before=${end}T23:59:59`
 }
+
+function lastContentAPI(date) {
+	return `http://institutosanpablo.com.ar/aplicacion/wp-json/wp/v2/posts?categories=1&orderby=date&order=desc`
+}
+
+// function previousContentAPI(timezoneOffset) {
+// 	const yesterday = todayDate(timezoneOffset).dayBefore()
+// 	const yesterdayString = yesterday.string()
+// 	return `http://institutosanpablo.com.ar/aplicacion/wp-json/wp/v2/posts?categories=1&orderby=date&order=desc&before=${yesterdayString}T23:59:59`
+// }
 
 function todayDate(timezoneOffset) {
 	return new Date().normalizeTZ(timezoneOffset)

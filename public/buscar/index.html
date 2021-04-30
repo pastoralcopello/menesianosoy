@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="/css/general.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
-    <link rel="stylesheet" href="/css/proximos.css">
+    <link rel="stylesheet" href="/css/buscar.css">
     <link rel="stylesheet" href="/css/loader.css">
   
   
@@ -89,9 +89,9 @@
 
                 <a href="https://menesianosoy.web.app/" class="nav-item">hoy</a>
 
-                <a href="https://menesianosoy.web.app/buscar" class="nav-item">buscar</a>
+                <a href="https://menesianosoy.web.app/buscar" class="nav-item current">buscar</a>
 
-                <a href="https://menesianosoy.web.app/proximos" class="nav-item current">próximos</a>
+                <a href="https://menesianosoy.web.app/proximos" class="nav-item">próximos</a>
 
             </nav>
 
@@ -107,11 +107,15 @@
 
     <section class="display-none">
 
-        <div class="container section-container">
-            
-            <h4 class="proximos">Próximos</h4>
+        <div class="container section-container buscar-container">
 
-            <div class="articles-list-container"></div>
+            <form>
+                <div class="mb-3">
+                  <label for="dateInput" class="form-label">Fecha</label>
+                  <input type="date" id="dateInput" name="trip-start" value="2021-01-01" min="2019-05-01" max="2021-12-12">
+                </div>
+                <button type="button" class="btn btn-primary" onclick="buscar()">Buscar</button>
+            </form>
         
         </div>
 
@@ -133,8 +137,6 @@
                 </div>
 
                 <div class="col-md-4">
-
-
 
                 </div>
 
@@ -169,7 +171,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 
     <script src="/js/general.js"></script>
-    <script src="/js/proximos.js"></script>
+    <script src="/js/buscar.js"></script>
 
 </body>
 </html>

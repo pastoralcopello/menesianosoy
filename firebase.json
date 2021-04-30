@@ -16,6 +16,10 @@
         "function": "futureContent"
       },
       {
+        "source": "/lastContent",
+        "function": "lastContent"
+      },
+      {
         "source": "/someDateContent",
         "function": "someDateContent"
       }
